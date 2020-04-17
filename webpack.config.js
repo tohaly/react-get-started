@@ -8,17 +8,17 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const isDev = process.env.NODE_ENV === 'development';
 
 module.exports = {
-  entry: { main: './src/index.js' },
+  entry: { main: './src/js/index.js' },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].[chunkhash].js'
+    filename: '[name].[chunkhash].js',
   },
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         use: { loader: 'babel-loader' },
-        exclude: /node_modules/
+        exclude: /node_modules/,
       },
       {
         test: /\.ico$/,
@@ -26,10 +26,10 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              esModule: false
-            }
-          }
-        ]
+              esModule: false,
+            },
+          },
+        ],
       },
       {
         test: /\.(png|jpe?g|gif|svg)$/,
@@ -38,29 +38,29 @@ module.exports = {
             loader: 'file-loader',
             options: {
               name: 'images/[name].[ext]',
-              esModule: false
-            }
+              esModule: false,
+            },
           },
           {
             loader: 'image-webpack-loader',
             options: {
               mozjpeg: {
                 progressive: true,
-                quality: 65
+                quality: 65,
               },
               optipng: {
-                enabled: false
+                enabled: false,
               },
               gifsicle: {
-                interlaced: false
+                interlaced: false,
               },
               pngquant: {
                 quality: [0.65, 0.9],
-                speed: 4
-              }
-            }
-          }
-        ]
+                speed: 4,
+              },
+            },
+          },
+        ],
       },
       {
         test: /\.(woff|woff2|ttf|otf|)$/i,
@@ -68,24 +68,24 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              name: '[name].[ext]'
-            }
-          }
-        ]
+              name: '[name].[ext]',
+            },
+          },
+        ],
       },
       {
         test: /\.css$/,
-        use: [isDev ? 'style-loader' : MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
-      }
-    ]
+        use: [isDev ? 'style-loader' : MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
+      },
+    ],
   },
   resolve: {
     alias: {
-      images: path.resolve(__dirname, 'images')
-    }
+      images: path.resolve(__dirname, 'images'),
+    },
   },
   devServer: {
-    overlay: true
+    overlay: true,
   },
   plugins: [
     new MiniCssExtractPlugin({ filename: 'style.[contenthash].css' }),
@@ -93,19 +93,19 @@ module.exports = {
       inject: false,
       hash: true,
       template: './src/index.html',
-      filename: 'index.html'
+      filename: 'index.html',
     }),
     new OptimizeCssAssetsPlugin({
       assetNameRegExp: /\.css$/g,
       cssProcessor: require('cssnano'),
       cssProcessorPluginOptions: {
-        preset: ['default']
+        preset: ['default'],
       },
-      canPrint: true
+      canPrint: true,
     }),
     new WebpackMd5Hash(),
     new webpack.DefinePlugin({
-      NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-    })
-  ]
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+    }),
+  ],
 };
